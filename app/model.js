@@ -1,17 +1,21 @@
 class Photo {
-    id
-    album
-    originalName
-    url
-    lastChange
-    history
+    #id
+    #album
+    #originalName
+    #url
+    #lastChange
+    #history
 
-    constructor(id, filename) {
+    constructor(id, album, originalName, url, lastChange, history) {
         this.id = id
-        this.filename = filename
+        this.album = album
+        this.originalName = originalName
+        this.url = url
+        this.lastChange = lastChange
+        this.history = history
     }
 }
 
 let photosArray = []
 
-module.exports = { Animal, photosArray }
+module.exports = { Photo, photosArray }
