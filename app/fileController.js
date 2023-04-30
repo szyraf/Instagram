@@ -60,7 +60,6 @@ module.exports = {
     },
     getAll: (req, res) => {
         let arr = []
-        console.log(photosArray)
         photosArray.forEach((photo) => arr.push(photo.getJSON()))
 
         res.statusCode = 200
@@ -97,7 +96,6 @@ module.exports = {
 
         photosArray = photosArray.filter((photo) => photo.id !== id)
 
-        console.log(photo.url)
         fs.unlinkSync(photo.url)
 
         res.statusCode = 200
@@ -136,19 +134,89 @@ module.exports = {
         data = JSON.parse(data)
 
         let id = parseInt(data.id)
-        let tag = data.tag
+        let newTag = data.tag
 
-        if (!tagsArray.find((tag) => tag.name === tag) === undefined) {
+        if (tagsArray.find((tag) => tag.tag === newTag) !== undefined) {
             let photo = photosArray.find((photo) => photo.id === id)
             if (photo === undefined) {
                 res.statusCode = 404
                 res.setHeader('Content-Type', 'application/json')
                 res.end(JSON.stringify({ status: 'photo not found', id: id }))
             } else {
-                photo.tags.push()
+                if (photo.tags.find((tag) => tag.tag === newTag) !== undefined) {
+                    res.statusCode = 400
+                    res.setHeader('Content-Type', 'application/json')
+                    res.end(JSON.stringify({ status: 'tag already exists', id: id }))
+                    return
+                }
+                photo.tags.push({
+                    newTag,
+                    popularity: photo.tags.length,
+                })
 
                 res.statusCode = 200
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify(photo.getJSON()))
             }
         }
+    },
+    updateTagsMass: async (req, res) => {
+        let data = await getRequestData(req)
+        data = JSON.parse(data)
+
+        let id = parseInt(data.id)
+        let newTags = data.tags
+
+        let photo = photosArray.find((photo) => photo.id === id)
+        if (photo === undefined) {
+            res.statusCode = 404
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ status: 'photo not found', id: id }))
+        } else {
+            let isAnyTagExists = false
+            newTags.forEach((newTag) => {
+                if (tagsArray.find((tag) => tag.tag === newTag) !== undefined) {
+                    if (photo.tags.find((photoTag) => photoTag.tag === newTag) === undefined) {
+                        isAnyTagExists = true
+                        photo.tags.push({
+                            newTag,
+                            popularity: photo.tags.length,
+                        })
+                    }
+                }
+            })
+
+            if (!isAnyTagExists) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ status: 'no tags exists', id: id }))
+                return
+            }
+
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify(photo.getJSON()))
+        }
+    },
+    getTags: (req, res) => {
+        let id = parseInt(req.url.match(/\/api\/photos\/tags\/([0-9]+)/)[1])
+
+        let photo = photosArray.find((photo) => photo.id === id)
+
+        if (photo === undefined) {
+            res.statusCode = 404
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ status: 'photo not found', id: id }))
+            return
+        }
+
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json')
+        res.end(
+            JSON.stringify({
+                id: photo.id,
+                tags: photo.tags,
+            })
+        )
     },
 }

@@ -1,6 +1,4 @@
 class Photo {
-    tags
-
     constructor(id, album, originalName, url, lastChange, history) {
         this.id = id
         this.album = album
@@ -8,6 +6,7 @@ class Photo {
         this.url = url
         this.lastChange = lastChange
         this.history = history
+        this.tags = []
     }
 
     getJSON() {
@@ -18,6 +17,7 @@ class Photo {
             url: this.url,
             lastChange: this.lastChange,
             history: this.history,
+            tags: this.tags,
         }
     }
 }

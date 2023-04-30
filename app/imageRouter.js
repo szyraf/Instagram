@@ -19,6 +19,10 @@ const router = async (req, res) => {
         fileController.update(req, res)
     } else if (req.url === '/api/photos/tags' && req.method === 'PATCH') {
         fileController.updateTags(req, res)
+    } else if (req.url === '/api/photos/tags/mass' && req.method === 'PATCH') {
+        fileController.updateTagsMass(req, res)
+    } else if (req.url.match(/\/api\/photos\/tags\/([0-9]+)/) && req.method === 'GET') {
+        fileController.getTags(req, res)
     }
 }
 
