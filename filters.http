@@ -1,0 +1,4 @@
+### GET - pobierz meta dane
+GET http://localhost:3000/api/filters/metadata/1683229305737469 HTTP/1.1
+
+

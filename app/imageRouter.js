@@ -1,11 +1,5 @@
 const fileController = require('./fileController')
 
-/*
-PATCH /api/photos/tags  // aktualizacja danych zdjęcia o nowy tag
-PATCH /api/photos/tags/mass // aktualizacja danych zdjęcia o tablicę nowych tag-ów
-GET /api/photos/tags/12345 // pobranie tagów danego zdjęcia
-*/
-
 const router = async (req, res) => {
     if (req.url === '/api/photos' && req.method === 'POST') {
         fileController.upload(req, res)
