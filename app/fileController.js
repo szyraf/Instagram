@@ -142,23 +142,29 @@ module.exports = {
                 res.statusCode = 404
                 res.setHeader('Content-Type', 'application/json')
                 res.end(JSON.stringify({ status: 'photo not found', id: id }))
-            } else {
-                if (photo.tags.find((tag) => tag.tag === newTag) !== undefined) {
-                    res.statusCode = 400
-                    res.setHeader('Content-Type', 'application/json')
-                    res.end(JSON.stringify({ status: 'tag already exists', id: id }))
-                    return
-                }
-                photo.tags.push({
-                    newTag,
-                    popularity: photo.tags.length,
-                })
-
-                res.statusCode = 200
-                res.setHeader('Content-Type', 'application/json')
-                res.end(JSON.stringify(photo.getJSON()))
+                return
             }
+
+            if (photo.tags.find((tag) => tag.tag === newTag) !== undefined) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ status: 'tag already exists', id: id }))
+                return
+            }
+            photo.tags.push({
+                newTag,
+                popularity: photo.tags.length,
+            })
+
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify(photo.getJSON()))
+            return
         }
+
+        res.statusCode = 404
+        res.setHeader('Content-Type', 'application/json')
+        res.end(JSON.stringify({ status: 'tag not found', tag: newTag }))
     },
     updateTagsMass: async (req, res) => {
         let data = await getRequestData(req)
@@ -172,31 +178,32 @@ module.exports = {
             res.statusCode = 404
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ status: 'photo not found', id: id }))
-        } else {
-            let isAnyTagExists = false
-            newTags.forEach((newTag) => {
-                if (tagsArray.find((tag) => tag.tag === newTag) !== undefined) {
-                    if (photo.tags.find((photoTag) => photoTag.tag === newTag) === undefined) {
-                        isAnyTagExists = true
-                        photo.tags.push({
-                            newTag,
-                            popularity: photo.tags.length,
-                        })
-                    }
-                }
-            })
-
-            if (!isAnyTagExists) {
-                res.statusCode = 400
-                res.setHeader('Content-Type', 'application/json')
-                res.end(JSON.stringify({ status: 'no tags exists', id: id }))
-                return
-            }
-
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.end(JSON.stringify(photo.getJSON()))
+            return
         }
+
+        let isAnyTagExists = false
+        newTags.forEach((newTag) => {
+            if (tagsArray.find((tag) => tag.tag === newTag) !== undefined) {
+                if (photo.tags.find((photoTag) => photoTag.tag === newTag) === undefined) {
+                    isAnyTagExists = true
+                    photo.tags.push({
+                        newTag,
+                        popularity: photo.tags.length,
+                    })
+                }
+            }
+        })
+
+        if (!isAnyTagExists) {
+            res.statusCode = 400
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ status: 'no tags exists', id: id }))
+            return
+        }
+
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json')
+        res.end(JSON.stringify(photo.getJSON())) 
     },
     getTags: (req, res) => {
         let id = parseInt(req.url.match(/\/api\/photos\/tags\/([0-9]+)/)[1])
@@ -219,4 +226,21 @@ module.exports = {
             })
         )
     },
+    getFilesFromFolder: (req, res) => {
+        let folder = req.url.match(/\/api\/photos\/([\s\S]*)/)[1]
+
+        console.log(folder);
+
+        if (fs.existsSync(`uploads\\${folder}`)) {
+            let files = fs.readdirSync(`uploads\\${folder}`)
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ status: 'folder found', folder: folder, files: files }))
+            return
+        }
+
+        res.statusCode = 404
+        res.setHeader('Content-Type', 'application/json')
+        res.end(JSON.stringify({ status: 'folder not found', folder: folder }))        
+    }
 }

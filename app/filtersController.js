@@ -48,4 +48,48 @@ module.exports = {
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify(metadata))
     },
+    filter: async (req, res) => {
+        let data = await getRequestData(req)
+        data = JSON.parse(data)
+
+        let id = parseInt(data.id)
+        let filter = data.filter
+
+        let photo = photosArray.find((photo) => photo.id === id)
+
+        if (photo === undefined) {
+            res.statusCode = 404
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ status: 'photo not found', id: id }))
+            return
+        }
+
+        let filters = ['tint', 'rotate', 'crop', 'flip', 'flop', 'grayscale', 'resize']
+
+        if (!filters.includes(filter)) {
+            res.statusCode = 404
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ status: 'filter not found', filter: filter }))
+            return
+        }
+
+        let newurl = ''
+
+        if (filter === 'rotate') {
+            let rotate = await sharp(photo.url).rotate(90).toFile(photo.url.split('.')[0] + '-rotate.jpg');
+            newurl = photo.url.split('.')[0] + '-rotate.jpg'
+        }
+
+        photo.history.push({
+            status: filter,
+            timestamp: new Date().toISOString(),
+            url: newurl,
+        })
+
+        photo.lastChange = filter
+
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json')
+        res.end(JSON.stringify(photo.getJSON()))
+    }
 }

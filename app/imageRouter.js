@@ -1,5 +1,7 @@
 const fileController = require('./fileController')
 
+//GET /api/photos/folder_name // dane json zdjęć z wybranego folderu
+
 const router = async (req, res) => {
     if (req.url === '/api/photos' && req.method === 'POST') {
         fileController.upload(req, res)
@@ -17,6 +19,8 @@ const router = async (req, res) => {
         fileController.updateTagsMass(req, res)
     } else if (req.url.match(/\/api\/photos\/tags\/([0-9]+)/) && req.method === 'GET') {
         fileController.getTags(req, res)
+    } else if (req.url.match(/\/api\/photos\/([\s\S]*)/) && req.method === 'GET') {
+        fileController.getFilesFromFolder(req, res)
     }
 }
 
