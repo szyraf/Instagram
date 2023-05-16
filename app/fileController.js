@@ -10,7 +10,7 @@ module.exports = {
         const form = formidable({
             multiples: true,
             uploadDir: 'temp',
-            keepExtensions: true,
+            keepExtensions: true
         })
 
         form.parse(req, (err, fields, files) => {
@@ -46,8 +46,8 @@ module.exports = {
             let history = [
                 {
                     status: 'original',
-                    timestamp: new Date().toISOString(),
-                },
+                    timestamp: new Date().toISOString()
+                }
             ]
 
             let photo = new Photo(id, album, originalName, url, lastChange, history)
@@ -120,7 +120,7 @@ module.exports = {
 
         photo.history.push({
             status: status,
-            timestamp: new Date().toISOString(),
+            timestamp: new Date().toISOString()
         })
 
         photo.lastChange = status
@@ -153,7 +153,7 @@ module.exports = {
             }
             photo.tags.push({
                 newTag,
-                popularity: photo.tags.length,
+                popularity: photo.tags.length
             })
 
             res.statusCode = 200
@@ -188,7 +188,7 @@ module.exports = {
                     isAnyTagExists = true
                     photo.tags.push({
                         newTag,
-                        popularity: photo.tags.length,
+                        popularity: photo.tags.length
                     })
                 }
             }
@@ -203,7 +203,7 @@ module.exports = {
 
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify(photo.getJSON())) 
+        res.end(JSON.stringify(photo.getJSON()))
     },
     getTags: (req, res) => {
         let id = parseInt(req.url.match(/\/api\/photos\/tags\/([0-9]+)/)[1])
@@ -222,14 +222,12 @@ module.exports = {
         res.end(
             JSON.stringify({
                 id: photo.id,
-                tags: photo.tags,
+                tags: photo.tags
             })
         )
     },
     getFilesFromFolder: (req, res) => {
         let folder = req.url.match(/\/api\/photos\/([\s\S]*)/)[1]
-
-        console.log(folder);
 
         if (fs.existsSync(`uploads\\${folder}`)) {
             let files = fs.readdirSync(`uploads\\${folder}`)
@@ -241,6 +239,6 @@ module.exports = {
 
         res.statusCode = 404
         res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify({ status: 'folder not found', folder: folder }))        
+        res.end(JSON.stringify({ status: 'folder not found', folder: folder }))
     }
 }

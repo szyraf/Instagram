@@ -44,5 +44,5 @@ module.exports = {
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ status: 'tag already exists' }))
         }
-    },
+    }
 }

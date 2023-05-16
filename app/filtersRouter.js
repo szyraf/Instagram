@@ -10,9 +10,9 @@ const router = async (req, res) => {
         filtersController.getMetadata(req, res)
     } else if (req.url === '/api/filters' && req.method === 'PATCH') {
         filtersController.filter(req, res)
-    } else if (req.url.match(/\/api\/getfile\/([0-9]+)/) && req.method === 'GET') {
+    } else if (req.url.match(/\/api\/getfile\/([0-9]+)$/) && req.method === 'GET') {
         filtersController.getFile(req, res)
-    } else if (req.url.match(/\/api\/getfile\/([0-9]+)\/([\s\S]*)/) && req.method === 'GET') {
+    } else if (req.url.match(/\/api\/getfile\/([0-9]+)\/([a-z]+)$/) && req.method === 'GET') {
         filtersController.getFileWithFilter(req, res)
     }
 }
