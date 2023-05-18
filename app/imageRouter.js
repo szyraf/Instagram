@@ -1,7 +1,5 @@
 const fileController = require('./fileController')
 
-//GET /api/photos/folder_name // dane json zdjęć z wybranego folderu
-
 const router = async (req, res) => {
     if (req.url === '/api/photos' && req.method === 'POST') {
         fileController.upload(req, res)

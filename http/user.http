@@ -1,0 +1,29 @@
+### POST - dodaj rejestracje usera
+
+POST http://localhost:3000/api/user/register HTTP/1.1
+content-type: application/json
+
+{    
+   "name": "name",
+   "lastName": "lastName",
+   "email":"name@email.pl",
+   "password":"password"
+}
+
+### GET - potwierdzenie rejestracji usera
+GET http://localhost:3000/api/user/confirm/<token> HTTP/1.1
+
+### POST - dodaj logowanie usera
+
+POST http://localhost:3000/api/user/login HTTP/1.1
+authorization: Bearer eyJhbG.eyJlbWFpbCII6MTY1MjI4NjgzN30.xkXNNho-MxECZsJXCIU
+
+{
+    "email":"email",
+    "password":"password"
+}
+
+### GET - pobierz wszystkich userow
+
+GET http://localhost:3000/api/user HTTP/1.1
+
