@@ -2,6 +2,7 @@ const http = require('http')
 const imageRouter = require('./app/imageRouter')
 const tagsRouter = require('./app/tagsRouter')
 const filtersRouter = require('./app/filtersRouter')
+const usersRouter = require('./app/usersRouter')
 
 require('dotenv').config()
 

@@ -1,4 +1,4 @@
-const userController = require('./userController')
+const usersController = require('./usersController')
 
 /*
 a) POST /api/user/register // register usera
@@ -9,13 +9,13 @@ d) GET /api/user // json all users - funkcja pomocnicza dla testów
 
 const router = async (req, res) => {
     if (req.url === '/api/user/register' && req.method === 'POST') {
-        await userController.register(req, res)
-    } else if (req.url.match(/\/api\/user\/confirm\/(^[\w-]*\.[\w-]*\.[\w-]*$)/) && req.method === 'GET') {
-        await userController.confirm(req, res)
+        await usersController.register(req, res)
+    } else if (req.url.match(/\/api\/user\/confirm\/([a-zA-Z0-9.\-_]+)/) && req.method === 'GET') {
+        await usersController.confirm(req, res)
     } else if (req.url === '/api/user/login' && req.method === 'POST') {
-        await userController.login(req, res)
+        await usersController.login(req, res)
     } else if (req.url === '/api/user' && req.method === 'GET') {
-        await userController.allUsers(req, res)
+        await usersController.allUsers(req, res)
     }
 }
 

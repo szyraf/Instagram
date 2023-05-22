@@ -8,8 +8,8 @@ PATCH http://localhost:3000/api/filters HTTP/1.1
 content-type: application/json
 
 {
-    "id": 1684267431656689,
-    "filter": "flip"
+    "id": 1684488436684489,
+    "filter": "flop"
 }
 
 ### GET /api/getfile/12345 - pobierz zdjęcie wg id

@@ -6,21 +6,21 @@ content-type: application/json
 {    
    "name": "name",
    "lastName": "lastName",
-   "email":"name@email.pl",
-   "password":"password"
+   "email": "name@email.pl",
+   "password": "password"
 }
 
 ### GET - potwierdzenie rejestracji usera
-GET http://localhost:3000/api/user/confirm/<token> HTTP/1.1
+GET http://localhost:3000/api/user/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJpYXQiOjE2ODQ0OTE2NjAsImV4cCI6MTY4NDQ5NTI2MH0.KUo6qsj0VQje5mEEhxRV1zfDnSGf_1AkNQcZgoTxC_o HTTP/1.1
 
 ### POST - dodaj logowanie usera
 
 POST http://localhost:3000/api/user/login HTTP/1.1
-authorization: Bearer eyJhbG.eyJlbWFpbCII6MTY1MjI4NjgzN30.xkXNNho-MxECZsJXCIU
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJpYXQiOjE2ODQ0OTI3MDcsImV4cCI6MTY4NDQ5NjMwN30.O1zOJLRGhxgV6KhJaUXIBELDNS44U5dg8xCEpFeyQjQ
 
 {
-    "email":"email",
-    "password":"password"
+    "email": "name@emai.pl",
+    "password": "password"
 }
 
 ### GET - pobierz wszystkich userow
