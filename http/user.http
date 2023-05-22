@@ -16,10 +16,9 @@ GET http://localhost:3000/api/user/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 ### POST - dodaj logowanie usera
 
 POST http://localhost:3000/api/user/login HTTP/1.1
-authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJpYXQiOjE2ODQ0OTI3MDcsImV4cCI6MTY4NDQ5NjMwN30.O1zOJLRGhxgV6KhJaUXIBELDNS44U5dg8xCEpFeyQjQ
 
 {
-    "email": "name@emai.pl",
+    "email": "name@email.pl",
     "password": "password"
 }
 

@@ -107,11 +107,7 @@ module.exports = {
             return
         }
 
-        console.log(data.email)
-
         let user = usersArray.find((user) => user.email === data.email)
-
-        console.log(user)
 
         if (user === undefined) {
             res.statusCode = 400
@@ -139,5 +135,9 @@ module.exports = {
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify({ status: 'ok', message: 'user logged in', token: newToken }))
     },
-    allUsers: async (req, res) => {}
+    allUsers: async (req, res) => {
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json')
+        res.end(JSON.stringify({ status: 'ok', message: 'all users', users: usersArray }))
+    }
 }
