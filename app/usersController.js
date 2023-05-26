@@ -136,6 +136,13 @@ module.exports = {
         res.end(JSON.stringify({ status: 'ok', message: 'user logged in', token: newToken }))
     },
     allUsers: async (req, res) => {
+        if (usersArray.length === 0) {
+            res.statusCode = 400
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ status: 'error', message: 'no users' }))
+            return
+        }
+
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify({ status: 'ok', message: 'all users', users: usersArray }))
