@@ -10,5 +10,6 @@ class User {
 }
 
 let usersArray = []
+let expiredTokens = []
 
-module.exports = { User, usersArray }
+module.exports = { User, usersArray, expiredTokens }

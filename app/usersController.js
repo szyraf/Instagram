@@ -1,6 +1,6 @@
 const formidable = require('formidable')
 const path = require('path')
-let { User, usersArray } = require('./user')
+let { User, usersArray, expiredTokens } = require('./user')
 const getRequestData = require('./getRequestData')
 const fs = require('fs')
 const bcrypt = require('bcryptjs')
@@ -8,10 +8,11 @@ const jwt = require('jsonwebtoken')
 
 require('dotenv').config()
 
-const createToken = async (email) => {
+const createToken = async (email, login) => {
     let token = await jwt.sign(
         {
-            email: email
+            email: email,
+            login: login
         },
         process.env.SECRET_KEY,
         {
@@ -53,7 +54,7 @@ module.exports = {
 
         usersArray.push(newUser)
 
-        let token = await createToken(email)
+        let token = await createToken(email, 'no')
 
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
@@ -69,6 +70,20 @@ module.exports = {
 
         try {
             let decoded = await jwt.verify(token, process.env.SECRET_KEY)
+
+            if (decoded === undefined) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ status: 'error', message: 'invalid token' }))
+                return
+            }
+
+            if (decoded.login !== 'no') {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ status: 'error', message: 'invalid token' }))
+                return
+            }
 
             let user = usersArray.find((user) => user.email === decoded.email)
             if (user === undefined) {
@@ -90,10 +105,12 @@ module.exports = {
             res.statusCode = 200
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ status: 'ok', message: 'user confirmed' }))
+            return
         } catch (ex) {
             res.statusCode = 400
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ status: 'error', message: 'token expired' }))
+            return
         }
     },
     login: async (req, res) => {
@@ -127,9 +144,10 @@ module.exports = {
             res.statusCode = 400
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ status: 'error', message: 'wrong password' }))
+            return
         }
 
-        let newToken = await createToken(user.email)
+        let newToken = await createToken(user.email, 'yes')
 
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
@@ -146,5 +164,74 @@ module.exports = {
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify({ status: 'ok', message: 'all users', users: usersArray }))
+    },
+    logout: async (req, res) => {
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            let token = req.headers.authorization.split(' ')[1]
+
+            if (token === undefined) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ status: 'error', message: 'invalid token' }))
+                return
+            }
+
+            if (expiredTokens.includes(token)) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ status: 'error', message: 'token expired' }))
+                return
+            }
+
+            try {
+                let decoded = await jwt.verify(token, process.env.SECRET_KEY)
+
+                if (decoded === undefined) {
+                    res.statusCode = 400
+                    res.setHeader('Content-Type', 'application/json')
+                    res.end(JSON.stringify({ status: 'error', message: 'invalid token' }))
+                    return
+                }
+
+                if (decoded.login !== 'yes') {
+                    res.statusCode = 400
+                    res.setHeader('Content-Type', 'application/json')
+                    res.end(JSON.stringify({ status: 'error', message: 'user not logged in' }))
+                    return
+                }
+
+                let user = usersArray.find((user) => user.email === decoded.email)
+
+                if (user === undefined) {
+                    res.statusCode = 400
+                    res.setHeader('Content-Type', 'application/json')
+                    res.end(JSON.stringify({ status: 'error', message: 'user not found' }))
+                    return
+                }
+
+                if (user.confirmed === false) {
+                    res.statusCode = 400
+                    res.setHeader('Content-Type', 'application/json')
+                    res.end(JSON.stringify({ status: 'error', message: 'user not confirmed' }))
+                    return
+                }
+
+                expiredTokens.push(token)
+
+                res.statusCode = 200
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ status: 'ok', message: 'user logged out' }))
+                return
+            } catch (ex) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ status: 'error', message: 'token expired' }))
+                return
+            }
+        }
+
+        res.statusCode = 400
+        res.setHeader('Content-Type', 'application/json')
+        res.end(JSON.stringify({ status: 'error', message: 'invalid token' }))
     }
 }

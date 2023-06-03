@@ -11,7 +11,7 @@ content-type: application/json
 }
 
 ### GET - potwierdzenie rejestracji usera
-GET http://localhost:3000/api/user/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJpYXQiOjE2ODQ0OTE2NjAsImV4cCI6MTY4NDQ5NTI2MH0.KUo6qsj0VQje5mEEhxRV1zfDnSGf_1AkNQcZgoTxC_o HTTP/1.1
+GET http://localhost:3000/api/user/confirm/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJsb2dpbiI6Im5vIiwiaWF0IjoxNjg1MzQ3NTAxLCJleHAiOjE2ODUzNTExMDF9.WghSRzeSVIpZ8eZ1etisGiv_kFjGXuloJ_Gxhx9Svlk HTTP/1.1
 
 ### POST - dodaj logowanie usera
 
@@ -26,3 +26,7 @@ POST http://localhost:3000/api/user/login HTTP/1.1
 
 GET http://localhost:3000/api/user HTTP/1.1
 
+### GET - wyloguj usera
+
+GET http://localhost:3000/api/user/logout HTTP/1.1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJsb2dpbiI6InllcyIsImlhdCI6MTY4NTM0ODk0MywiZXhwIjoxNjg1MzUyNTQzfQ.v6nRN7mAkkSA-M8AidYTormv_ZnpApm0eqIUfC4EOvo

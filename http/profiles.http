@@ -1,0 +1,33 @@
+### GET - pobierz profil użytkownika
+GET http://localhost:3000/api/profile HTTP/1.1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJsb2dpbiI6InllcyIsImlhdCI6MTY4NTM0ODk0MywiZXhwIjoxNjg1MzUyNTQzfQ.v6nRN7mAkkSA-M8AidYTormv_ZnpApm0eqIUfC4EOvo
+
+### PATCH - zmień dane użytkownika
+PATCH http://localhost:3000/api/profile HTTP/1.1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJsb2dpbiI6InllcyIsImlhdCI6MTY4NTM0ODE1MiwiZXhwIjoxNjg1MzUxNzUyfQ.7TRw21dqL_8Kgn-gqQRxynuWqEq4hL0QEjbpbbFjdrA
+
+{
+    "name": "Jan",
+    "lastname": "Kowalski",
+    "email": "nowy@email.pl",
+    "password": "nowehaslo"
+}
+
+### POST - ustaw zdjęcie profilowe
+
+POST http://localhost:3000/api/profile HTTP/1.1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWVAZW1haWwucGwiLCJsb2dpbiI6InllcyIsImlhdCI6MTY4NTM1MDA0NCwiZXhwIjoxNjg1MzUzNjQ0fQ.sf6z9uUJkiWrSTm7fhFvKMQd0JqDFz0bm3BhRiJEXf8
+Content-Type: multipart/form-data; boundary=----FormBoundary1234
+
+------FormBoundary1234
+Content-Disposition: form-data; name="myFile"; filename="input2.jpg"
+Content-Type: image/jpeg
+
+< ./input2.jpg
+
+------FormBoundary1234
+Content-Disposition: form-data; name="album"
+Content-Type: text/plain
+
+koty
+------FormBoundary1234
