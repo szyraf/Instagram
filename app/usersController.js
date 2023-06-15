@@ -39,7 +39,7 @@ module.exports = {
         if (user !== undefined) {
             res.statusCode = 400
             res.setHeader('Content-Type', 'application/json')
-            res.end(JSON.stringify({ status: 'error', message: 'user already exists' }))
+            res.end(JSON.stringify({ status: 'error', message: 'user with this email already exists' }))
             return
         }
 
@@ -56,12 +56,15 @@ module.exports = {
 
         let token = await createToken(email, 'no')
 
+        let ip = data.ip
+
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
         res.end(
             JSON.stringify({
                 status: 'ok',
-                message: `skopiuj poniższy link do przeglądarki: http://localhost:3000/api/user/confirm/${token} w celu potwierdzenia konta. Uwaga: link jest ważny przez godzinę`
+                message: `The link is valid for one hour`,
+                url: `http://${ip}:3000/api/user/confirm/${token}`
             })
         )
     },

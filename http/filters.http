@@ -14,7 +14,7 @@ content-type: application/json
 
 ### GET /api/getfile/12345 - pobierz zdjęcie wg id
 
-GET http://localhost:3000/api/getfile/12345 HTTP/1.1
+GET http://localhost:3000/api/getfile/1686816408742306 HTTP/1.1
 
 
 ### GET /api/getfile/12345/filtername - pobierz zdjęcie wg id i nazwy filtra

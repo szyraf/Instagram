@@ -59,6 +59,13 @@ module.exports = {
         })
     },
     getAll: (req, res) => {
+        if (photosArray.length === 0) {
+            res.statusCode = 404
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ status: 'no photos' }))
+            return
+        }
+
         let arr = []
         photosArray.forEach((photo) => arr.push(photo.getJSON()))
 
